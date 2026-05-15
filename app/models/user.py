@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 
@@ -15,3 +15,7 @@ class User(Base):
     password = Column(String, nullable=False)
 
     role = Column(String, nullable=False)
+
+    customers = relationship("Customer", back_populates="assigned_rep")
+    
+    sales_activities = relationship("SalesActivity" )

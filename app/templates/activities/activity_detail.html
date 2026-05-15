@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Activity Detail</title>
+</head>
+
+<body>
+
+    <h1>{{ activity.title }}</h1>
+
+    <p>Customer:{{ activity.customer.company_name }}</p>
+
+    <p>Activity Type:{{ activity.activity_type }}</p>
+
+    <p>Notes:{{ activity.notes }}</p>
+
+    <p>Status:{{ activity.status }}</p>
+
+    <p>Activity Date:{{ activity.activity_date }}</p>
+
+    <p>Follow Up:{{ activity.follow_up_date }}</p>
+
+    <hr>
+
+    <h3>Update Status</h3>
+
+    <form method="POST" action="/activities/{{ activity.id }}/status">
+
+        <select name="status">
+
+            <option value="pending">Pending</option>
+
+            <option value="completed">Completed</option>
+
+            <option value="cancelled">Cancelled</option>
+
+        </select>
+
+        <button type="submit">Update</button>
+
+    </form>
+
+</body>
+
+</html>

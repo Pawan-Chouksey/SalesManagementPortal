@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sales Activities</title>
+</head>
+
+<body>
+
+    <h1>Sales Activities</h1>
+
+    <a href="/activities/new">Create Activity</a>
+
+    <hr>
+
+    {% for activity in activities %}
+
+        <div>
+
+            <h3><a href="/activities/{{ activity.id }}">{{ activity.title }}</a>
+</h3>
+
+            <p>Type:{{ activity.activity_type }}</p>
+
+            <p>Status:{{ activity.status }}</p>
+
+            <p>Notes:{{ activity.notes }}</p>
+
+            <p>Date:{{ activity.activity_date }}</p>
+
+            <hr>
+
+        </div>
+
+    {% endfor %}
+
+</body>
+</html>

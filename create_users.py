@@ -1,5 +1,12 @@
 from app.database import SessionLocal
+
 from app.models.user import User
+from app.models.customer import Customer
+from app.models.customer_contact import CustomerContact
+from app.models.customer_interaction import CustomerInteraction
+from app.models.account_plan import AccountPlan
+from app.models.renewal import Renewal
+
 from app.utils.auth import hash_password
 
 db = SessionLocal()

@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
-
 from fastapi.responses import HTMLResponse
-
 from fastapi.templating import Jinja2Templates
 
 from jose import jwt
@@ -173,7 +171,7 @@ def sales_rep_dashboard(
 
     return templates.TemplateResponse(
         request=request,
-        name="sales_rep.html",
+        name="manager/sales_rep.html",
         context={"user": user}
     )
 
@@ -188,7 +186,7 @@ def sales_manager_dashboard(
 
     return templates.TemplateResponse(
         request=request,
-        name="sales_manager.html",
+        name="manager/sales_manager.html",
         context={"user": user}
     )
 
@@ -203,7 +201,7 @@ def account_manager_dashboard(
 
     return templates.TemplateResponse(
         request=request,
-        name="account_manager.html",
+        name="manager/account_manager.html",
         context={"user": user}
     )
 
@@ -218,7 +216,7 @@ def marketing_dashboard(
 
     return templates.TemplateResponse(
         request=request,
-        name="marketing.html",
+        name="manager/marketing.html",
         context={"user": user}
     )
 
@@ -233,7 +231,7 @@ def product_manager_dashboard(
 
     return templates.TemplateResponse(
         request=request,
-        name="product_manager.html",
+        name="manager/product_manager.html",
         context={"user": user}
     )
 
@@ -248,7 +246,7 @@ def executive_dashboard(
 
     return templates.TemplateResponse(
         request=request,
-        name="executive.html",
+        name="manager/executive.html",
         context={"user": user}
     )
 

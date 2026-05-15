@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Customer Details</h1>
+
+    <hr>
+    <p><strong>ID:</strong>{{ customer.id }}</p>
+
+    <p><strong>Company:</strong>{{ customer.company_name }}</p>
+
+    <p><strong>Address:</strong>{{ customer.address }}</p>
+
+    <p><strong>Website:</strong>{{ customer.website }}</p>
+
+    <p><strong>Created At:</strong>{{ customer.created_at }}</p>
+
+    <hr>
+
+    <hr>
+
+    <h2>Contacts</h2>
+
+    {% if customer.contacts %}
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+
+        {% for contact in customer.contacts %}
+
+        <tr>
+            <td>{{ contact.name }}</td>
+            <td>{{ contact.designation }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.phone }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+    {% else %}
+    <p>No contacts added.</p>
+    {% endif %}
+    <hr>
+    <h3>Add Contact</h3>
+
+    <form action="/customers/{{ customer.id }}/contacts/add" method="post" >
+        <label>Name</label>
+        <br>
+
+        <input type="text" name="name" required >
+
+        <br><br>
+
+        <label>Designation</label>
+        <br>
+
+        <input type="text" name="designation" >
+
+        <br><br>
+
+        <label>Email</label>
+        <br>
+
+        <input type="email" name="email" >
+
+        <br><br>
+
+        <label>Phone</label>
+        <br>
+
+        <input type="text" name="phone" >
+
+        <br><br>
+
+        <button type="submit">Add Contact</button>
+
+    </form>
+
+        <hr>
+
+    <h2>Interaction History</h2>
+
+    {% if customer.interactions %}
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+            <th>Type</th>
+            <th>Notes</th>
+            <th>User</th>
+            <th>Date</th>
+        </tr>
+
+        {% for interaction in customer.interactions %}
+
+        <tr>
+
+            <td>{{ interaction.interaction_type }}</td>
+
+            <td>{{ interaction.notes }}</td>
+
+            <td>{{ interaction.user.name }}</td>
+
+            <td>{{ interaction.interaction_date }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No interactions found.</p>
+
+    {% endif %}
+
+    <hr>
+
+    <h3>Add Interaction</h3>
+
+    <form action="/customers/{{ customer.id }}/interactions/add" method="post">
+
+        <label>Interaction Type</label>
+        <br>
+
+        <select name="interaction_type">
+
+            <option value="CALL">CALL</option>
+
+            <option value="MEETING">MEETING</option>
+
+            <option value="EMAIL">EMAIL</option>
+
+            <option value="NOTE">NOTE</option>
+
+        </select>
+
+        <br><br>
+
+        <label>Notes</label>
+        <br>
+
+        <textarea name="notes" rows="5" cols="50" ></textarea>
+
+        <br><br>
+
+        <button type="submit">Add Interaction</button>
+
+    </form>
+
+    <hr>
+
+    <h2>Renewals</h2>
+
+    {% if customer.renewals %}
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+            <th>Contract Start</th>
+            <th>Contract End</th>
+            <th>Status</th>
+            <th>Reminder Date</th>
+        </tr>
+
+        {% for renewal in customer.renewals %}
+
+        <tr>
+
+            <td>{{ renewal.contract_start }}</td>
+
+            <td>{{ renewal.contract_end }}</td>
+
+            <td>{{ renewal.renewal_status }}</td>
+
+            <td>{{ renewal.reminder_date }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No renewals found.</p>
+
+    {% endif %}
+
+    <hr>
+
+    <h3>Add Renewal</h3>
+
+    <form action="/customers/{{ customer.id }}/renewals/add" method="post" >
+
+        <label>Contract Start</label>
+        <br>
+
+        <input type="date" name="contract_start" >
+
+        <br><br>
+
+        <label>Contract End</label>
+        <br>
+
+        <input type="date" name="contract_end" >
+
+        <br><br>
+
+        <label>Renewal Status</label>
+        <br>
+
+        <select name="renewal_status">
+
+            <option value="pending"> Pending </option>
+
+            <option value="renewed"> Renewed </option>
+
+            <option value="expired"> Expired </option>
+
+        </select>
+
+        <br><br>
+
+        <label>Reminder Date</label>
+        <br>
+
+        <input type="date" name="reminder_date" >
+
+        <br><br>
+
+        <button type="submit"> Add Renewal </button>
+
+    </form>
+
+    <hr>
+
+    <h2>Account Plans</h2>
+
+    {% if customer.account_plans %}
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+            <th>Goals</th>
+            <th>Renewal Value</th>
+        </tr>
+
+        {% for plan in customer.account_plans %}
+
+        <tr>
+
+            <td>{{ plan.goals }}</td>
+
+            <td>{{ plan.renewal_value }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No account plans found.</p>
+
+    {% endif %}
+
+    <hr>
+
+    <h3>Add Account Plan</h3>
+
+    <form action="/customers/{{ customer.id }}/account-plans/add" method="post" >
+
+        <label>Goals</label>
+        <br>
+
+        <textarea name="goals" rows="5" cols="50" ></textarea>
+
+        <br><br>
+
+        <label>Renewal Value</label>
+        <br>
+
+        <input type="number" name="renewal_value" >
+
+        <br><br>
+
+        <button type="submit"> Add Account Plan </button>
+
+    </form>
+
+    <a href="/customers">Back To Customers</a>
+
+</body>
+</html>
+
+

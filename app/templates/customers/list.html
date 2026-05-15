@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Customers</h1>
+
+    <a href="/customers/create">Add Customer</a>
+
+    <hr>
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>ID</th>
+            <th>Company</th>
+            <th>Website</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for customer in customers %}
+
+        <tr>
+            <td>{{ customer.id }}</td>
+            <td>{{ customer.company_name }}</td>
+            <td>{{ customer.website }}</td>
+            <td><a href="/customers/{{ customer.id }}">View</a>
+                |
+                <a href="/customers/{{ customer.id }}/edit">Edit</a>
+                |
+                <form action="/customers/{{ customer.id }}/delete" method="post" style="display:inline;">
+
+                    <button type="submit">Delete</button>
+
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
