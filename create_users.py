@@ -6,6 +6,8 @@ from app.models.customer_contact import CustomerContact
 from app.models.customer_interaction import CustomerInteraction
 from app.models.account_plan import AccountPlan
 from app.models.renewal import Renewal
+from app.models.sales_activity import SalesActivity
+from app.models.opportunity import Opportunity
 
 from app.utils.auth import hash_password
 

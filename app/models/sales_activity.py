@@ -34,6 +34,6 @@ class SalesActivity(Base):
 
     status = Column(String, default="pending")
 
-    user = relationship("User")
+    user = relationship("User", back_populates="sales_activities")
 
     customer = relationship("Customer", back_populates="sales_activities")

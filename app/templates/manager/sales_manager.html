@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales Manager Dashboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>Sales Manager Dashboard</h1>
+
+            <p class="text-muted">Welcome {{ user.name }}</p>
+        </div>
+
+        <a href="/logout" class="btn btn-danger">Logout</a>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">Team Analytics</h5>
+
+                    <p class="card-text">View overall sales performance,
+                        pipeline metrics, and team KPIs.</p>
+
+                    <a href="/manager/dashboard" class="btn btn-dark" >Open Dashboard</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">Customers</h5>
+
+                    <p class="card-text">Manage customers and assigned
+                        sales representatives.</p>
+
+                    <a href="/customers" class="btn btn-primary" >Manage Customers</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">Opportunities Pipeline</h5>
+
+                    <p class="card-text">Track active deals,forecasts, and pipeline value.</p>
+
+                    <a href="/opportunities" class="btn btn-success" >View Opportunities</a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="card-title"> Sales Activities </h5>
+
+                    <p class="card-text"> Monitor meetings, calls,
+                        and follow-up activities.</p>
+
+                    <a href="/activities" class="btn btn-warning" > View Activities </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">Executive Reports</h5>
+
+                    <p class="card-text">Analyze business growth,
+                        revenue trends, and deal performance.</p>
+
+                    <a href="/manager/dashboard" class="btn btn-info" > View Reports </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -31,3 +31,5 @@ class Customer(Base):
     renewals = relationship("Renewal", back_populates="customer", cascade="all, delete-orphan")
 
     sales_activities = relationship("SalesActivity", back_populates="customer", cascade="all, delete-orphan")
+
+    opportunities = relationship("Opportunity",back_populates="customer",cascade="all, delete-orphan")

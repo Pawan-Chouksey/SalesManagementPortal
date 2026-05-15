@@ -26,11 +26,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 @router.get("/activities", response_class=HTMLResponse)
-def activities_page(
-    request: Request,
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user)
-):
+def activities_page(request: Request,db: Session = Depends(get_db),user: User = Depends(get_current_user)):
 
     if not user:
         return RedirectResponse(
@@ -55,11 +51,7 @@ def activities_page(
 
 
 @router.get("/activities/new", response_class=HTMLResponse)
-def create_activity_page(
-    request: Request,
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user)
-):
+def create_activity_page(request: Request,db: Session = Depends(get_db),user: User = Depends(get_current_user)):
 
     customers = db.query(Customer).all()
 
@@ -75,15 +67,9 @@ def create_activity_page(
 
 
 @router.post("/activities/new")
-def create_activity(
-    customer_id: int = Form(...),
-    activity_type: str = Form(...),
-    title: str = Form(...),
-    notes: str = Form(...),
-    follow_up_date: str = Form(None),
-
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user)
+def create_activity(customer_id: int = Form(...),activity_type: str = Form(...),
+    title: str = Form(...),notes: str = Form(...),follow_up_date: str = Form(None),
+    db: Session = Depends(get_db),user: User = Depends(get_current_user)
 ):
 
     activity = SalesActivity(
@@ -110,13 +96,7 @@ def create_activity(
     )
 
 @router.get("/activities/{activity_id}", response_class=HTMLResponse)
-def activity_detail(
-    activity_id: int,
-    request: Request,
-
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user)
-):
+def activity_detail(activity_id: int,request: Request,db: Session = Depends(get_db),user: User = Depends(get_current_user)):
 
     if not user:
         return RedirectResponse(
@@ -145,13 +125,7 @@ def activity_detail(
     )
 
 @router.post("/activities/{activity_id}/status")
-def update_activity_status(
-    activity_id: int,
-    status: str = Form(...),
-
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user)
-):
+def update_activity_status(activity_id: int,status: str = Form(...),db: Session = Depends(get_db),user: User = Depends(get_current_user)):
 
     activity = db.query(SalesActivity).filter(
         SalesActivity.id == activity_id
@@ -169,5 +143,35 @@ def update_activity_status(
 
     return RedirectResponse(
         url=f"/activities/{activity_id}",
+        status_code=302
+    )
+
+
+@router.post("/activities/{activity_id}/delete")
+def delete_activity(activity_id: int,db: Session = Depends(get_db),user: User = Depends(get_current_user)):
+
+    if not user:
+        return RedirectResponse(
+            url="/login",
+            status_code=302
+        )
+
+    activity = db.query(SalesActivity).filter(
+        SalesActivity.id == activity_id,
+        SalesActivity.user_id == user.id
+    ).first()
+
+    if not activity:
+        raise HTTPException(
+            status_code=404,
+            detail="Activity not found"
+        )
+
+    db.delete(activity)
+
+    db.commit()
+
+    return RedirectResponse(
+        url="/activities",
         status_code=302
     )

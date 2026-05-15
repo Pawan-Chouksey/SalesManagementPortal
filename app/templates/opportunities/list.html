@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Pipeline Management</h1>
+            <p class="text-muted">Track deals and sales opportunities</p>
+        </div>
+        <div>
+            <a href="/opportunities/create" class="btn btn-primary">Create Opportunity</a>
+            <a href="/" class="btn btn-dark">Home</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="text-muted small uppercase">Total Pipeline</h5>
+                    <h3 class="text-primary mb-0">₹{{ total_pipeline }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="text-muted small uppercase">Won Deals</h5>
+                    <h3 class="text-success mb-0">{{ won_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="text-muted small uppercase">Lost Deals</h5>
+                    <h3 class="text-danger mb-0">{{ lost_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Customer</th>
+                            <th>Value</th>
+                            <th>Stage</th>
+                            <th>Probability</th>
+                            <th>Competitor</th>
+                            <th>Close Date</th>
+                            <th style="min-width: 160px;">Update</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for opp in opportunities %}
+                        <tr>
+                            <td><strong>{{ opp.title }}</strong></td>
+                            <td>{{ opp.customer.company_name }}</td>
+                            <td>₹{{ opp.deal_value }}</td>
+                            <td><span class="badge bg-info text-dark">{{ opp.stage }}</span></td>
+                            <td>{{ opp.probability }}%</td>
+                            <td class="text-muted">{{ opp.competitor_name or '-' }}</td>
+                            <td>{{ opp.expected_close_date }}</td>
+                            <td>
+                                <form action="/opportunities/{{ opp.id }}/stage" method="post" class="row g-1 align-items-center">
+                                    <div class="col-10">
+                                        <select name="stage" class="form-select form-select-sm mb-1">
+                                            <option>Lead</option>
+                                            <option>Qualified</option>
+                                            <option>Proposal</option>
+                                            <option>Negotiation</option>
+                                            <option>Won</option>
+                                            <option>Lost</option>
+                                        </select>
+                                        <input type="text" name="loss_reason" class="form-control form-control-sm" placeholder="Loss reason (if lost)">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm w-100" title="Save Stage">✓</button>
+                                    </div>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/opportunities/{{ opp.id }}/delete" method="post" onsubmit="return confirm('Delete this opportunity?')">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

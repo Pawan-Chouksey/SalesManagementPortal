@@ -18,9 +18,7 @@ from app.utils.auth import verify_password
 
 router = APIRouter()
 
-templates = Jinja2Templates(
-    directory="app/templates"
-)
+templates = Jinja2Templates(directory="app/templates")
 
 SECRET_KEY = "mysecretkey"
 
@@ -33,25 +31,16 @@ def create_access_token(data: dict):
 
     to_encode = data.copy()
 
-    expire = datetime.utcnow() + timedelta(
-        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-    )
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     to_encode.update({"exp": expire})
 
-    encoded_jwt = jwt.encode(
-        to_encode,
-        SECRET_KEY,
-        algorithm=ALGORITHM
-    )
+    encoded_jwt = jwt.encode(to_encode,SECRET_KEY,algorithm=ALGORITHM)
 
     return encoded_jwt
 
 
-def get_current_user(
-    access_token: str = Cookie(None),
-    db: Session = Depends(get_db)
-):
+def get_current_user(access_token: str = Cookie(None),db: Session = Depends(get_db)):
 
     if not access_token:
         return None
@@ -143,10 +132,7 @@ def login( email: str = Form(...), password: str = Form(...), db: Session = Depe
     return response
 
 @router.get("/dashboard", response_class=HTMLResponse)
-def dashboard(
-    request: Request,
-    user: User = Depends(get_current_user)
-):
+def dashboard(request: Request,user: User = Depends(get_current_user)):
 
     if not user:
         return RedirectResponse(
@@ -162,12 +148,7 @@ def dashboard(
 
 
 @router.get("/sales_rep", response_class=HTMLResponse)
-def sales_rep_dashboard(
-    request: Request,
-    user: User = Depends(
-        role_required(["sales_rep"])
-    )
-):
+def sales_rep_dashboard(request: Request,user: User = Depends(role_required(["sales_rep"]))):
 
     return templates.TemplateResponse(
         request=request,
@@ -177,12 +158,7 @@ def sales_rep_dashboard(
 
 
 @router.get("/sales_manager", response_class=HTMLResponse)
-def sales_manager_dashboard(
-    request: Request,
-    user: User = Depends(
-        role_required(["sales_manager"])
-    )
-):
+def sales_manager_dashboard(request: Request,user: User = Depends(role_required(["sales_manager"]))):
 
     return templates.TemplateResponse(
         request=request,
@@ -192,12 +168,7 @@ def sales_manager_dashboard(
 
 
 @router.get("/account_manager", response_class=HTMLResponse)
-def account_manager_dashboard(
-    request: Request,
-    user: User = Depends(
-        role_required(["account_manager"])
-    )
-):
+def account_manager_dashboard(request: Request,user: User = Depends(role_required(["account_manager"]))):
 
     return templates.TemplateResponse(
         request=request,
@@ -207,12 +178,7 @@ def account_manager_dashboard(
 
 
 @router.get("/marketing", response_class=HTMLResponse)
-def marketing_dashboard(
-    request: Request,
-    user: User = Depends(
-        role_required(["marketing"])
-    )
-):
+def marketing_dashboard(request: Request,user: User = Depends(role_required(["marketing"]))):
 
     return templates.TemplateResponse(
         request=request,
@@ -222,12 +188,7 @@ def marketing_dashboard(
 
 
 @router.get("/product_manager", response_class=HTMLResponse)
-def product_manager_dashboard(
-    request: Request,
-    user: User = Depends(
-        role_required(["product_manager"])
-    )
-):
+def product_manager_dashboard(request: Request,user: User = Depends(role_required(["product_manager"]))):
 
     return templates.TemplateResponse(
         request=request,
@@ -237,12 +198,7 @@ def product_manager_dashboard(
 
 
 @router.get("/executive", response_class=HTMLResponse)
-def executive_dashboard(
-    request: Request,
-    user: User = Depends(
-        role_required(["executive"])
-    )
-):
+def executive_dashboard(request: Request,user: User = Depends(role_required(["executive"]))):
 
     return templates.TemplateResponse(
         request=request,
@@ -261,4 +217,3 @@ def logout():
     response.delete_cookie("access_token")
 
     return response
-
