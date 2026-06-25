@@ -1,133 +1,80 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sales Manager Dashboard</title>
+{% extends 'base.html' %}
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-</head>
+{% block title %}Sales Manager Dashboard - Salesline{% endblock %}
 
-<body class="bg-light">
-
-<div class="container mt-5">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
-        <div>
-            <h1>Sales Manager Dashboard</h1>
-
-            <p class="text-muted">Welcome {{ user.name }}</p>
-        </div>
-
-        <a href="/logout" class="btn btn-danger">Logout</a>
-
+{% block content %}
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="fw-bold text-theme-dark"><i class="bi bi-person-badge-fill me-2 text-primary"></i>Sales Manager Dashboard</h1>
+        <p class="text-muted mb-0">Oversee team performance and pipeline metrics.</p>
     </div>
-
-    <div class="row">
-
-        <div class="col-md-4 mb-4">
-
-            <div class="card shadow-sm">
-
-                <div class="card-body">
-
-                    <h5 class="card-title">Team Analytics</h5>
-
-                    <p class="card-text">View overall sales performance,
-                        pipeline metrics, and team KPIs.</p>
-
-                    <a href="/manager/dashboard" class="btn btn-dark" >Open Dashboard</a>
-
-                </div>
-
+    <div class="d-flex align-items-center gap-3">
+        <div class="bg-white px-3 py-2 rounded shadow-sm d-flex align-items-center gap-2 border">
+            <div class="avatar-circle avatar-solid-primary">
+                {{ user.name[0] }}
             </div>
-
-        </div>
-
-        <div class="col-md-4 mb-4">
-
-            <div class="card shadow-sm">
-
-                <div class="card-body">
-
-                    <h5 class="card-title">Customers</h5>
-
-                    <p class="card-text">Manage customers and assigned
-                        sales representatives.</p>
-
-                    <a href="/customers" class="btn btn-primary" >Manage Customers</a>
-
-                </div>
-
+            <div class="lh-1">
+                <span class="d-block fw-bold small text-dark">{{ user.name }}</span>
+                <span class="badge bg-secondary fs-xxs">{{ user.role }}</span>
             </div>
-
         </div>
-
-        <div class="col-md-4 mb-4">
-
-            <div class="card shadow-sm">
-
-                <div class="card-body">
-
-                    <h5 class="card-title">Opportunities Pipeline</h5>
-
-                    <p class="card-text">Track active deals,forecasts, and pipeline value.</p>
-
-                    <a href="/opportunities" class="btn btn-success" >View Opportunities</a>
-
-                </div>
-
-            </div>
-
-        </div>
-
+        <a href="/logout" class="btn btn-outline-danger px-4"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
     </div>
-
-    <div class="row">
-
-        <div class="col-md-6 mb-4">
-
-            <div class="card shadow-sm">
-
-                <div class="card-body">
-
-                    <h5 class="card-title"> Sales Activities </h5>
-
-                    <p class="card-text"> Monitor meetings, calls,
-                        and follow-up activities.</p>
-
-                    <a href="/activities" class="btn btn-warning" > View Activities </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6 mb-4">
-
-            <div class="card shadow-sm">
-
-                <div class="card-body">
-
-                    <h5 class="card-title">Executive Reports</h5>
-
-                    <p class="card-text">Analyze business growth,
-                        revenue trends, and deal performance.</p>
-
-                    <a href="/manager/dashboard" class="btn btn-info" > View Reports </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
 </div>
 
-</body>
-</html>
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="glass-card h-100 p-4 border-0 shadow-sm text-center dashboard-nav-card">
+            <div class="icon-box mx-auto mb-3 icon-box-lg bg-primary-subtle-custom">
+                <i class="bi bi-graph-up"></i>
+            </div>
+            <h5 class="fw-bold">Team Analytics</h5>
+            <p class="text-muted small mb-4">View overall sales performance & pipeline metrics.</p>
+            <a href="/manager/dashboard" class="btn btn-primary w-100">Open Dashboard</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card h-100 p-4 border-0 shadow-sm text-center dashboard-nav-card">
+            <div class="icon-box mx-auto mb-3 icon-box-lg bg-success-subtle-custom">
+                <i class="bi bi-building"></i>
+            </div>
+            <h5 class="fw-bold">Customers</h5>
+            <p class="text-muted small mb-4">Manage customers and assigned sales representatives.</p>
+            <a href="/customers" class="btn btn-success w-100">Manage Customers</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card h-100 p-4 border-0 shadow-sm text-center dashboard-nav-card">
+            <div class="icon-box mx-auto mb-3 icon-box-lg bg-warning-subtle-custom">
+                <i class="bi bi-currency-dollar"></i>
+            </div>
+            <h5 class="fw-bold">Opportunities Pipeline</h5>
+            <p class="text-muted small mb-4">Track active deals, forecasts, and pipeline value.</p>
+            <a href="/opportunities" class="btn btn-warning text-dark w-100">View Opportunities</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="glass-card h-100 p-4 border-0 shadow-sm text-center dashboard-nav-card">
+            <div class="icon-box mx-auto mb-3 icon-box-lg bg-info-subtle-custom">
+                <i class="bi bi-calendar2-check"></i>
+            </div>
+            <h5 class="fw-bold">Sales Activities</h5>
+            <p class="text-muted small mb-4">Monitor meetings, calls, and follow-up activities.</p>
+            <a href="/activities" class="btn btn-info text-white w-100">View Activities</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="glass-card h-100 p-4 border-0 shadow-sm text-center dashboard-nav-card">
+            <div class="icon-box mx-auto mb-3 icon-box-lg bg-dark-subtle-custom">
+                <i class="bi bi-file-earmark-bar-graph"></i>
+            </div>
+            <h5 class="fw-bold">Executive Reports</h5>
+            <p class="text-muted small mb-4">Analyze business growth, revenue trends, and deal performance.</p>
+            <a href="/manager/dashboard" class="btn btn-dark w-100">View Reports</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

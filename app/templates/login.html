@@ -1,42 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+{% extends 'base.html' %}
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-sm" style="max-width: 400px; width: 100%;">
-        <div class="card-body p-4">
-            <h2 class="text-center mb-4">Sales Portal</h2>
+{% block title %}Sign in - Salesline{% endblock %}
+
+{% block main_content %}
+<div class="row g-0 min-vh-100 bg-white">
+    
+        <div class="col-lg-6 d-none d-lg-flex split-left-pane position-relative">
+        
+        <div class="mb-5 d-flex align-items-center gap-3">
+            <div class="icon-box-md avatar-solid-primary">
+                <i class="bi bi-graph-up"></i>
+            </div>
+            <span class="fw-bold fs-4 text-theme-dark" style="letter-spacing: -0.5px;">Salesline</span>
+        </div>
+
+        <div class="mb-4">
+            <span class="badge rounded-pill bg-white text-dark border py-2 px-3 fw-normal box-shadow-sm-custom">
+                <span class="text-secondary fs-xxs align-middle me-1">●</span> Q4 dashboard now live
+            </span>
+        </div>
+
+        <h1 class="display-4 fw-bold mb-4 text-theme-dark letter-spacing-md" style="line-height: 1.1;">
+            Close more deals with a <br>portal built for sales <br>teams.
+        </h1>
+
+        <p class="fs-5 mb-5 text-gray-600 max-w-450">
+            Pipeline visibility, lead routing and forecasting — all in one calm, fast workspace.
+        </p>
+
+        <div class="max-w-450">
+            <div class="login-feature-card">
+                <div class="icon-box">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-1 text-theme-dark">Real-time pipeline</h6>
+                    <p class="text-muted small mb-0">See revenue movement as it happens.</p>
+                </div>
+            </div>
+
+            <div class="login-feature-card">
+                <div class="icon-box">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-1 text-theme-dark">Smart lead routing</h6>
+                    <p class="text-muted small mb-0">Match every lead to the right rep automatically.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="position-absolute position-absolute" style="bottom: 2rem; left: 4rem;">
+            <p class="small text-muted mb-0">© 2026 Salesline · All rights reserved</p>
+        </div>
+    </div>
+
+        <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center p-4 p-md-5">
+        <div class="w-100 max-w-400">
+            
+            <div class="mb-5">
+                <h2 class="fw-bold mb-2 text-theme-dark" style="letter-spacing: -0.5px;">Welcome back</h2>
+                <p class="text-muted">Sign in to your sales portal to continue.</p>
+            </div>
 
             <form method="POST" action="/login">
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="Enter Email" required>
+                
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-gray-700">Email</label>
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-envelope"></i>
+                        <input type="email" name="email" class="form-control form-control-icon py-2" placeholder="you@company.com" required>
+                    </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label small fw-bold mb-0 text-gray-700">Password</label>
+                        <a href="#" class="small text-decoration-none text-theme-primary">Forgot password?</a>
+                    </div>
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-lock"></i>
+                        <input type="password" name="password" class="form-control form-control-icon py-2" placeholder="Enter your password" required>
+                        <i class="bi bi-eye"></i>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <div class="mb-4 form-check">
+                    <input type="checkbox" class="form-check-input" id="keepSignedIn">
+                    <label class="form-check-label small text-muted" for="keepSignedIn">Keep me signed in for 30 days</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 d-flex justify-content-center align-items-center" style="gap: 8px;">
+                    Sign in <i class="bi bi-arrow-right"></i>
+                </button>
             </form>
 
-            <hr>
-
-            <div class="text-muted text-center small">
-                <strong>Demo Accounts:</strong><br>
-                salesrep@test.com | salesmanager@test.com<br>
-                <strong>Password:</strong> 1234
+                        <div class="mt-4 p-3 rounded bg-light-gray border border-gray-300">
+                <p class="small fw-bold mb-2 text-gray-700">Demo accounts</p>
+                <p class="small text-muted mb-1 font-monospace-custom">salesrep@test.com</p>
+                <p class="small text-muted mb-2 font-monospace-custom">salesmanager@test.com</p>
+                <hr class="border-gray-200">
+                <p class="small text-muted mb-0">Password: 1234</p>
             </div>
+
+            <div class="text-center mt-5">
+                <p class="small text-muted">Don't have an account? <a href="#" class="fw-bold text-decoration-none text-theme-primary">Request access</a></p>
+            </div>
+
         </div>
     </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

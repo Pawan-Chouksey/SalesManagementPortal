@@ -1,216 +1,288 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Customer Details</h1>
-        <div>
-            <a href="/customers/{{ customer.id }}/edit" class="btn btn-warning">Edit</a>
-            <a href="/customers" class="btn btn-secondary">Back</a>
-            <a href="/" class="btn btn-dark">Home</a>
-        </div>
+{% extends 'base.html' %}
+
+{% block title %}Customer Details - Salesline{% endblock %}
+
+{% block content %}
+<div class="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+    <div>
+        <h2 class="fw-bold mb-1 text-theme-dark"><i class="bi bi-building me-2 text-primary"></i>{{ customer.company_name }}</h2>
+        <p class="text-muted mb-0">ID: #{{ customer.id }} | Added on {{ customer.created_at.strftime('%B %d, %Y') if customer.created_at else 'Unknown' }}</p>
     </div>
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <p><strong>ID:</strong> {{ customer.id }}</p>
-            <p><strong>Company:</strong> {{ customer.company_name }}</p>
-            <p><strong>Address:</strong> {{ customer.address }}</p>
-            <p><strong>Website:</strong> {{ customer.website }}</p>
-            <p><strong>Created At:</strong> {{ customer.created_at }}</p>
-        </div>
+    <div class="d-flex gap-2">
+        <a href="/" class="btn btn-secondary px-3"><i class="bi bi-house me-2"></i>Home</a>
+        <a href="/customers" class="btn btn-secondary px-3"><i class="bi bi-arrow-left me-2"></i>Back</a>
+        <a href="/customers/{{ customer.id }}/edit" class="btn btn-warning px-4 fw-bold text-dark"><i class="bi bi-pencil me-2"></i>Edit</a>
     </div>
+</div>
 
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <h3>Contacts</h3>
-            {% if customer.contacts %}
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Designation</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for contact in customer.contacts %}
-                    <tr>
-                        <td>{{ contact.name }}</td>
-                        <td>{{ contact.designation }}</td>
-                        <td>{{ contact.email }}</td>
-                        <td>{{ contact.phone }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p>No contacts added.</p>
-            {% endif %}
-            <hr>
-            <form action="/customers/{{ customer.id }}/contacts/add" method="post">
-                <div class="row">
-                    <div class="col-md-3 mb-2">
-                        <input type="text" name="name" class="form-control" placeholder="Name" required>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <input type="text" name="designation" class="form-control" placeholder="Designation">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <input type="email" name="email" class="form-control" placeholder="Email">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <input type="text" name="phone" class="form-control" placeholder="Phone">
-                    </div>
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold mb-3 border-bottom pb-2 text-theme-dark"><i class="bi bi-info-circle me-2 text-primary"></i>Company Information</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <p class="mb-1 text-muted small fw-bold text-uppercase">Address</p>
+                    <p class="mb-0">{{ customer.address or "No address provided" }}</p>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Contact</button>
+                <div class="col-md-6">
+                    <p class="mb-1 text-muted small fw-bold text-uppercase">Website</p>
+                    {% if customer.website %}
+                    <a href="{{ customer.website }}" target="_blank" class="text-decoration-none fw-bold text-theme-primary">
+                        {{ customer.website }} <i class="bi bi-box-arrow-up-right ms-1 small"></i>
+                    </a>
+                    {% else %}
+                    <p class="mb-0 text-muted">No website provided</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-pills mb-4 gap-2" id="customerTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active bg-white shadow-sm" id="contacts-tab" data-bs-toggle="tab" data-bs-target="#contacts" type="button" role="tab" class="text-theme-dark fw-medium rounded">
+            <i class="bi bi-person-lines-fill me-2 text-primary"></i>Contacts
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-white shadow-sm" id="interactions-tab" data-bs-toggle="tab" data-bs-target="#interactions" type="button" role="tab" class="text-theme-dark fw-medium rounded">
+            <i class="bi bi-chat-left-text me-2 text-success"></i>Interactions
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-white shadow-sm" id="renewals-tab" data-bs-toggle="tab" data-bs-target="#renewals" type="button" role="tab" class="text-theme-dark fw-medium rounded">
+            <i class="bi bi-calendar-check me-2 text-warning"></i>Renewals
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link bg-white shadow-sm" id="plans-tab" data-bs-toggle="tab" data-bs-target="#plans" type="button" role="tab" class="text-theme-dark fw-medium rounded">
+            <i class="bi bi-bullseye me-2 text-danger"></i>Account Plans
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="customerTabsContent">
+    
+        <div class="tab-pane fade show active" id="contacts" role="tabpanel">
+        <div class="glass-card p-0 overflow-hidden border-0 shadow-sm mb-4">
+            <div class="p-4 border-bottom bg-white d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0 text-theme-dark">Contacts List</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-header-bg">
+                        <tr>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Name</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Designation</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Email</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        {% for contact in customer.contacts %}
+                        <tr>
+                            <td class="px-4 py-3 fw-bold text-theme-dark">{{ contact.name }}</td>
+                            <td class="px-4 py-3 text-muted">{{ contact.designation or "-" }}</td>
+                            <td class="px-4 py-3"><a href="mailto:{{ contact.email }}" class="text-decoration-none">{{ contact.email or "-" }}</a></td>
+                            <td class="px-4 py-3 text-muted">{{ contact.phone or "-" }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center py-4 text-muted">No contacts found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="glass-card p-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-plus-circle me-2 text-primary"></i>Add New Contact</h6>
+            <form action="/customers/{{ customer.id }}/contacts/add" method="post" class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="designation" class="form-control" placeholder="Job Title / Designation">
+                </div>
+                <div class="col-md-3">
+                    <input type="email" name="email" class="form-control" placeholder="Email Address">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="phone" class="form-control" placeholder="Phone Number">
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary px-4"><i class="bi bi-person-plus me-2"></i>Save Contact</button>
+                </div>
             </form>
         </div>
     </div>
 
-    
-    <div class="card mb-4">
-        <div class="card-body">
-            <h3>Interactions</h3>
-            {% if customer.interactions %}
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Notes</th>
-                        <th>User</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for interaction in customer.interactions %}
-                    <tr>
-                        <td>{{ interaction.interaction_type }}</td>
-                        <td>{{ interaction.notes }}</td>
-                        <td>{{ interaction.user.name }}</td>
-                        <td>{{ interaction.interaction_date }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p>No interactions found.</p>
-            {% endif %}
-            <hr>
+        <div class="tab-pane fade" id="interactions" role="tabpanel">
+        <div class="glass-card p-0 overflow-hidden border-0 shadow-sm mb-4">
+            <div class="p-4 border-bottom bg-white d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0 text-theme-dark">Activity History</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-header-bg">
+                        <tr>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Type</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Notes</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Logged By</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        {% for interaction in customer.interactions %}
+                        <tr>
+                            <td class="px-4 py-3">
+                                <span class="badge bg-light text-dark border">{{ interaction.interaction_type }}</span>
+                            </td>
+                            <td class="px-4 py-3 text-muted">{{ interaction.notes }}</td>
+                            <td class="px-4 py-3 fw-bold">{{ interaction.user.name }}</td>
+                            <td class="px-4 py-3 text-muted small">{{ interaction.interaction_date }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center py-4 text-muted">No interactions logged yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-card p-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-plus-circle me-2 text-success"></i>Log Interaction</h6>
             <form action="/customers/{{ customer.id }}/interactions/add" method="post">
-                <div class="mb-3">
+                <div class="mb-3 max-w-300">
+                    <label class="form-label small fw-bold text-muted">Interaction Type</label>
                     <select name="interaction_type" class="form-select">
-                        <option value="CALL">CALL</option>
-                        <option value="MEETING">MEETING</option>
-                        <option value="EMAIL">EMAIL</option>
-                        <option value="NOTE">NOTE</option>
+                        <option value="CALL">Call</option>
+                        <option value="MEETING">Meeting</option>
+                        <option value="EMAIL">Email</option>
+                        <option value="NOTE">Note</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <textarea name="notes" rows="4" class="form-control" placeholder="Notes"></textarea>
+                    <label class="form-label small fw-bold text-muted">Notes & Details</label>
+                    <textarea name="notes" rows="3" class="form-control" placeholder="What was discussed?"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Interaction</button>
+                <button type="submit" class="btn btn-success px-4"><i class="bi bi-journal-plus me-2"></i>Log Activity</button>
             </form>
         </div>
     </div>
 
+        <div class="tab-pane fade" id="renewals" role="tabpanel">
+        <div class="glass-card p-0 overflow-hidden border-0 shadow-sm mb-4">
+            <div class="p-4 border-bottom bg-white d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0 text-theme-dark">Contract Renewals</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-header-bg">
+                        <tr>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Start Date</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">End Date</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Status</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Reminder</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        {% for renewal in customer.renewals %}
+                        <tr>
+                            <td class="px-4 py-3 text-muted">{{ renewal.contract_start }}</td>
+                            <td class="px-4 py-3 fw-bold">{{ renewal.contract_end }}</td>
+                            <td class="px-4 py-3">
+                                {% if renewal.renewal_status == 'renewed' %}
+                                    <span class="badge bg-success text-white">Renewed</span>
+                                {% elif renewal.renewal_status == 'expired' %}
+                                    <span class="badge bg-danger text-white">Expired</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3 text-muted small">
+                                <i class="bi bi-bell-fill me-1 text-warning"></i> {{ renewal.reminder_date }}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center py-4 text-muted">No contracts found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h3>Renewals</h3>
-            {% if customer.renewals %}
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Status</th>
-                        <th>Reminder</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for renewal in customer.renewals %}
-                    <tr>
-                        <td>{{ renewal.contract_start }}</td>
-                        <td>{{ renewal.contract_end }}</td>
-                        <td>{{ renewal.renewal_status }}</td>
-                        <td>{{ renewal.reminder_date }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p>No renewals found.</p>
-            {% endif %}
-            <hr>
-            <form action="/customers/{{ customer.id }}/renewals/add" method="post">
-                <div class="row">
-                    <div class="col-md-3 mb-2">
-                        <input type="date" name="contract_start" class="form-control">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <input type="date" name="contract_end" class="form-control">
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <select name="renewal_status" class="form-select">
-                            <option value="pending">Pending</option>
-                            <option value="renewed">Renewed</option>
-                            <option value="expired">Expired</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <input type="date" name="reminder_date" class="form-control">
-                    </div>
+        <div class="glass-card p-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-plus-circle me-2 text-warning"></i>Track Renewal</h6>
+            <form action="/customers/{{ customer.id }}/renewals/add" method="post" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Contract Start</label>
+                    <input type="date" name="contract_start" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-primary">Add Renewal</button>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Contract End</label>
+                    <input type="date" name="contract_end" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Status</label>
+                    <select name="renewal_status" class="form-select">
+                        <option value="pending">Pending</option>
+                        <option value="renewed">Renewed</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Set Reminder</label>
+                    <input type="date" name="reminder_date" class="form-control">
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-warning text-dark fw-bold px-4"><i class="bi bi-calendar-plus me-2"></i>Save Renewal</button>
+                </div>
             </form>
         </div>
     </div>
 
+        <div class="tab-pane fade" id="plans" role="tabpanel">
+        <div class="glass-card p-0 overflow-hidden border-0 shadow-sm mb-4">
+            <div class="p-4 border-bottom bg-white d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0 text-theme-dark">Strategic Account Plans</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-header-bg">
+                        <tr>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0">Strategic Goals</th>
+                            <th class="text-muted fw-bold small text-uppercase px-4 py-3 border-0 w-200px">Target Value</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        {% for plan in customer.account_plans %}
+                        <tr>
+                            <td class="px-4 py-3 text-muted">{{ plan.goals }}</td>
+                            <td class="px-4 py-3 fw-bold text-success">${{ plan.renewal_value }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="2" class="text-center py-4 text-muted">No account plans defined yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <div class="card mb-5">
-        <div class="card-body">
-            <h3>Account Plans</h3>
-            {% if customer.account_plans %}
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Goals</th>
-                        <th>Renewal Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for plan in customer.account_plans %}
-                    <tr>
-                        <td>{{ plan.goals }}</td>
-                        <td>{{ plan.renewal_value }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p>No account plans found.</p>
-            {% endif %}
-            <hr>
+        <div class="glass-card p-4">
+            <h6 class="fw-bold mb-3"><i class="bi bi-plus-circle me-2 text-danger"></i>Add Account Plan</h6>
             <form action="/customers/{{ customer.id }}/account-plans/add" method="post">
                 <div class="mb-3">
-                    <textarea name="goals" rows="4" class="form-control" placeholder="Goals"></textarea>
+                    <label class="form-label small fw-bold text-muted">Key Goals & Strategy</label>
+                    <textarea name="goals" rows="3" class="form-control" placeholder="What is the objective for this account?"></textarea>
                 </div>
-                <div class="mb-3">
-                    <input type="number" name="renewal_value" class="form-control" placeholder="Renewal Value">
+                <div class="mb-3 max-w-300">
+                    <label class="form-label small fw-bold text-muted">Projected Value ($)</label>
+                    <input type="number" name="renewal_value" class="form-control" placeholder="0.00">
                 </div>
-                <button type="submit" class="btn btn-primary">Add Account Plan</button>
+                <button type="submit" class="btn btn-danger px-4"><i class="bi bi-graph-up-arrow me-2"></i>Save Plan</button>
             </form>
         </div>
     </div>
 </div>
-</body>
-</html>
+{% endblock %}
