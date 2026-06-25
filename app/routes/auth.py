@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
@@ -20,7 +21,7 @@ router = APIRouter()
 
 templates = Jinja2Templates(directory="app/templates")
 
-SECRET_KEY = "mysecretkey"
+SECRET_KEY = os.getenv("SECRET_KEY", "mysecretkey")
 
 ALGORITHM = "HS256"
 
